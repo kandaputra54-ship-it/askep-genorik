@@ -24,3 +24,60 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ========================================================= */
+/* PRINT LAYOUT FIX                                          */
+/* ========================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 14mm;
+  }
+
+  /* Paksa margin/padding body jadi 0 saat print */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Reset total semua elemen di dalam sheet biar gak ada yang nge-limit lebar */
+  #analisa-data-sheet,
+  #analisa-data-sheet * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #analisa-data-sheet {
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  /* Kunci tabel agar lebar kolom patuh pada colgroup */
+  #analisa-data-sheet table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    page-break-inside: auto;
+  }
+
+  #analisa-data-sheet thead {
+    display: table-header-group;
+  }
+
+  #analisa-data-sheet tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  #analisa-data-sheet th,
+  #analisa-data-sheet td {
+    color: #000000 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+}
