@@ -11,12 +11,12 @@ export default function DiagnosaForm() {
   const router = useRouter();
 
   const [mahasiswa, setMahasiswa] = useState({
-  isMahasiswa: true,
-  namaMhs: "",
-  nim: "",
-  ruang: "",
-  tgl: "",
-});
+    isMahasiswa: true,
+    namaMhs: "",
+    nim: "",
+    ruang: "",
+    tgl: "",
+  });
 
   const [pasien, setPasien] = useState({
     namaPasien: "",
@@ -28,7 +28,7 @@ export default function DiagnosaForm() {
     {
       id: 1,
       noDx: "1",
-      tanggalMuncul: new Date().toISOString().split("T")[0],
+      tanggalMuncul: "", // kosongkan, diisi di effect
       diagnosa: "",
       tanggalTeratasi: "",
       tandaTangan: "",
@@ -36,24 +36,31 @@ export default function DiagnosaForm() {
   ]);
 
   useEffect(() => {
-  const today = new Date().toLocaleDateString("en-CA");
+    const today = new Date().toLocaleDateString("en-CA");
 
-  let saved = null;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    saved = raw ? JSON.parse(raw) : null;
-  } catch (err) {
-    console.error("Gagal memuat data diagnosa:", err);
-  }
+    let saved = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      saved = raw ? JSON.parse(raw) : null;
+    } catch (err) {
+      console.error("Gagal memuat data diagnosa:", err);
+    }
 
-  setMahasiswa((prev) => ({
-    ...prev,
-    ...(saved?.mahasiswa ?? {}),
-    tgl: saved?.mahasiswa?.tgl || today,
-  }));
-  if (saved?.pasien) setPasien(saved.pasien);
-  if (saved?.rows?.length > 0) setRows(saved.rows);
-}, []);
+    setMahasiswa((prev) => ({
+      ...prev,
+      ...(saved?.mahasiswa ?? {}),
+      tgl: saved?.mahasiswa?.tgl || today,
+    }));
+    if (saved?.pasien) setPasien(saved.pasien);
+
+    if (saved?.rows?.length > 0) {
+      setRows(saved.rows);
+    } else {
+      setRows((prev) =>
+        prev.map((r, i) => (i === 0 ? { ...r, tanggalMuncul: today } : r)),
+      );
+    }
+  }, []);
 
   const handleAddRow = () => {
     setRows([
@@ -76,7 +83,7 @@ export default function DiagnosaForm() {
 
   const handleRowChange = (id, field, value) => {
     setRows(
-      rows.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+      rows.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
   };
 
@@ -200,7 +207,7 @@ export default function DiagnosaForm() {
                   className="inline-flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  Hapus 
+                  Hapus
                 </button>
               )}
             </div>
