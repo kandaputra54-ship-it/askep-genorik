@@ -12,6 +12,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  themeColor: "#2563eb",
+};
+
 export const metadata = {
   title: "Askep Gerontik - Sistem Informasi Asuhan Keperawatan Lansia",
   description:
@@ -29,7 +33,6 @@ export const metadata = {
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
-  themeColor: "#2563eb",
   openGraph: {
     title: "Askep Gerontik - Sistem Informasi Asuhan Keperawatan Lansia",
     description:
